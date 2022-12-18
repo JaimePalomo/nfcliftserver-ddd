@@ -3,9 +3,11 @@ module github.com/JaimePalomo/nfcliftserver-ddd
 go 1.19
 
 require (
+	github.com/Netflix/go-env v0.0.0-20220526054621-78278af1949d
 	github.com/federicoleon/bookstore_utils-go v0.0.0-20200406081703-a9b52b6e34e6
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-sql-driver/mysql v1.6.0
+	github.com/joho/godotenv v1.4.0
 )
 
 require (
