@@ -165,13 +165,13 @@ func (n *nfcLiftHandler) GetOperator(c *gin.Context) {
 
 func (n *nfcLiftHandler) DeleteOperator(c *gin.Context) {
 	var operator operators.Operator
-	operatorId, idErr := getIntParam(c.Param("operator_id"))
-	if idErr != nil {
-		c.JSON(idErr.Status(), idErr)
+	idOp, err := getIdOpFromQuery(c)
+	if err != nil {
+		c.JSON(err.Status(), err.Error())
 		return
 	}
-	operator.Id = operatorId
-	err := n.service.DeleteOperator(operator)
+	operator.Id = idOp
+	err = n.service.DeleteOperator(operator)
 	if err != nil {
 		c.JSON(err.Status(), err.Error())
 		return
@@ -277,17 +277,12 @@ func getStringParam(param string) (string, rest_errors.RestErr) {
 	return param, nil
 }
 
-func getIdOpFromQuery(c *gin.Context) (int, rest_errors.RestErr) {
+func getIdOpFromQuery(c *gin.Context) (string, rest_errors.RestErr) {
 	var restErr rest_errors.RestErr
 	value, exist := c.GetQuery("idOp")
 	if !exist {
 		restErr = rest_errors.NewBadRequestError("id operator is needed")
-		return 0, restErr
+		return "", restErr
 	}
-	idOp, err := strconv.ParseInt(value, 10, 64)
-	if err != nil {
-		restErr = rest_errors.NewBadRequestError(err.Error())
-		return 0, restErr
-	}
-	return int(idOp), restErr
+	return value, restErr
 }

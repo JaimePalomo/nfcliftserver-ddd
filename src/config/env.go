@@ -1,9 +1,9 @@
 package config
 
 import (
+	"github.com/JaimePalomo/nfcliftserver-ddd/toolkit/log"
 	"github.com/Netflix/go-env"
 	"github.com/joho/godotenv"
-	"log"
 )
 
 type config struct {
@@ -25,11 +25,11 @@ func init() {
 
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Panic("Error loading .env file")
 	}
 
 	_, err = env.UnmarshalFromEnviron(&Cfg)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 }

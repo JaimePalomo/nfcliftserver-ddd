@@ -15,7 +15,7 @@ type Lift struct {
 	AppDescription string `json:"appDescription"`
 	StopTexts      string `json:"stopTexts"`
 	StopMask       string `json:"stopMask"`
-	Distance       string `json:"distance"`
+	Distance       int    `json:"distance"`
 }
 
 func (l *Lift) Validate() rest_errors.RestErr {

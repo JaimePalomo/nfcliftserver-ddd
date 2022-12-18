@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/JaimePalomo/nfcliftserver-ddd/src/config"
+	"github.com/JaimePalomo/nfcliftserver-ddd/toolkit/log"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -23,7 +24,7 @@ func NewMySQLClient() *sql.DB {
 	if err = Client.Ping(); err != nil {
 		panic(err)
 	}
-	fmt.Println("Database succesfully configured and connected!")
+	log.Info("Database succesfully configured and connected!")
 
 	return Client
 }

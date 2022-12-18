@@ -6,7 +6,7 @@ import (
 )
 
 type DbOperatorsI interface {
-	GetById(id int) (*operators.Operator, rest_errors.RestErr)
+	GetById(id string) (*operators.Operator, rest_errors.RestErr)
 	Create(operator operators.Operator) rest_errors.RestErr
-	DeleteById(id int) rest_errors.RestErr
+	DeleteById(id string) rest_errors.RestErr
 }

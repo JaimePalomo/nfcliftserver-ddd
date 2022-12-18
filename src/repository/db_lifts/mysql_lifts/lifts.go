@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"github.com/JaimePalomo/nfcliftserver-ddd/src/domain/lifts"
 	"github.com/JaimePalomo/nfcliftserver-ddd/src/repository/db_lifts"
+	"github.com/JaimePalomo/nfcliftserver-ddd/toolkit/log"
 	"github.com/federicoleon/bookstore_utils-go/rest_errors"
 	"strings"
 )
@@ -25,9 +26,14 @@ func New(dbConnection *sql.DB) db_lifts.DbLiftsI {
 
 // GetByRae gets a lift by its RAE from database
 func (d dbLift) GetByRae(rae int) (*lifts.Lift, rest_errors.RestErr) {
+
+	var restErr rest_errors.RestErr
+
 	statement, err := d.db.Prepare(queryGetLiftByRae)
 	if err != nil {
-		return nil, rest_errors.NewInternalServerError("internal database error getting a new lift", err)
+		restErr = rest_errors.NewInternalServerError("internal database error getting a new lift", err)
+		log.Error(restErr)
+		return nil, restErr
 	}
 	defer statement.Close()
 
@@ -44,18 +50,23 @@ func (d dbLift) GetByRae(rae int) (*lifts.Lift, rest_errors.RestErr) {
 		&lift.Distance)
 	if err != nil {
 		if strings.Contains(err.Error(), "no rows in result set") {
-			return nil, rest_errors.NewNotFoundError("no lift found with given rae")
+			restErr = rest_errors.NewNotFoundError("no lift found with given rae")
+			log.Error(restErr)
+			return nil, restErr
 		}
-		return nil, rest_errors.NewInternalServerError("error getting lift from database", err)
+		restErr = rest_errors.NewInternalServerError("error getting lift from database", err)
+		return nil, restErr
 	}
 	return lift, nil
 }
 
 // Create inserts a lift in the database
-func (d dbLift) Create(lift lifts.Lift) rest_errors.RestErr {
+func (d dbLift) Create(lift lifts.Lift) (restErr rest_errors.RestErr) {
 	statement, err := d.db.Prepare(queryInsertLift)
 	if err != nil {
-		return rest_errors.NewInternalServerError("internal database error inserting a new lift", err)
+		restErr = rest_errors.NewInternalServerError("internal database error inserting a new lift", err)
+		log.Error(restErr)
+		return
 	}
 	defer statement.Close()
 

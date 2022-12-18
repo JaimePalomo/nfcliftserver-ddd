@@ -23,7 +23,7 @@ func New(dbConnection *sql.DB) db_operators.DbOperatorsI {
 	return &dbOperators{db: dbConnection}
 }
 
-func (d dbOperators) GetById(id int) (*operators.Operator, rest_errors.RestErr) {
+func (d dbOperators) GetById(id string) (*operators.Operator, rest_errors.RestErr) {
 	statement, err := d.db.Prepare(queryGetOperatorById)
 	if err != nil {
 		return nil, rest_errors.NewInternalServerError("internal database error getting operator", err)
@@ -58,7 +58,7 @@ func (d dbOperators) Create(operator operators.Operator) rest_errors.RestErr {
 	return nil
 }
 
-func (d dbOperators) DeleteById(id int) rest_errors.RestErr {
+func (d dbOperators) DeleteById(id string) rest_errors.RestErr {
 	statement, err := d.db.Prepare(queryDeleteOperatorById)
 	if err != nil {
 		return rest_errors.NewInternalServerError("internal database error deleting a operator", err)
